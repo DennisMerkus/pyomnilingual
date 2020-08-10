@@ -5,7 +5,7 @@ with open("README.md", "r") as readme:
 
 setuptools.setup(
     name="omnilingual",
-    version="0.1.0",
+    version="0.2.0",
     author="Dennis Merkus",
     description="Language code/feature utilities.",
     long_description=long_description,
