@@ -7,6 +7,7 @@ from typing import Dict, List, Optional
 from pydantic import BaseModel
 
 from .iso.iso_3 import Code as LanguageCode
+from .ietf.tag import IetfComponents
 
 
 class LanguageScope(Enum):
@@ -741,3 +742,31 @@ class Language(object):
             return self.alpha_3
         else:
             return "un"
+
+    def ietf_tag(
+        self,
+        include: IetfComponents = IetfComponents(),
+        alpha_3: bool = True,
+        hyphen: bool = True,
+    ) -> str:
+        subtags: List[str] = []
+
+        if include.language:
+            if alpha_3:
+                subtags.append(self.alpha_3)
+            else:
+                subtags.append(self.alpha_2)
+
+        if include.script and self.script is not None:
+            subtags.append(self.script.code)
+
+        if include.region and self.region is not None:
+            subtags.append(self.region.code)
+
+        separator: str = "-"
+
+        if not hyphen:
+            separator = "_"
+
+        return separator.join(subtags)
+

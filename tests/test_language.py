@@ -1,6 +1,6 @@
 import unittest
 
-from omnilingual.language import Language, LanguageCode
+from omnilingual.language import Language, LanguageCode, IetfComponents
 
 
 class TestLanguage(unittest.TestCase):
@@ -32,6 +32,20 @@ class TestLanguage(unittest.TestCase):
 
         self.assertEqual(Language.where(tag="fre").code, LanguageCode.French)
         self.assertEqual(Language.where(tag="ger").code, LanguageCode.German)
+
+    def test_ietf_code_without_region(self):
+        self.assertEqual(Language.where(tag="zh-Hant").ietf_tag(alpha_3=False), "zh")
+
+    def test_ietf_code_with_region(self):
+        self.assertEqual(
+            Language.where(tag="zh-Hant").ietf_tag(
+                IetfComponents(script=True), alpha_3=False
+            ),
+            "zh-Hant",
+        )
+
+    def test_ietf_regionless_code_with_region(self):
+        self.assertEqual(Language.where(tag="eng").ietf_tag(), "eng")
 
 
 if __name__ == "__main__":
